@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="gx.mysql.dao.problem.ProblemreplyMapper" >
+  <resultMap id="BaseResultMap" type="gx.common.entity.webproject.Problemreply" >
+    <result column="id" property="id" />
+    <result column="problemid" property="problemId" />
+    <result column="creator" property="creator" />
+    <result column="createTime" property="createTime" />
+    <result column="state" property="state" />
+    <result column="parent" property="parent" />
+    <result column="content" property="content" />
+    <result column="adoptState" property="adoptState" />
+    <result column="supportNumber" property="supportNumber" />
+	
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,problemid, creator  ,createTime  ,state  ,parent,    content,adoptState,supportNumber
+  </sql>
+  	
+  <sql id="TBase_Column_List" >
+    t.id,t.problemid, t.creator  ,t.createTime  ,t.state  ,t.parent,    t.content,t.adoptState,t.supportNumber
+  </sql>
+  	
+  	
+  <select id="selectId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+     select <include refid="Base_Column_List"/> from problemreply
+    where id = #{id}
+   </select>
+  	
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from problemreply
+    where id = #{id}
+  </delete>
+ 
+  <insert id="insertSelective" parameterType="gx.common.entity.webproject.Problemreply" useGeneratedKeys="true" keyProperty="id">
+    insert into problemreply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="problemId != null" >
+        problemid,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+          createTime,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="parent != null" >
+        parent,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+       <if test="adoptState != null" >
+        adoptState,
+      </if>
+       <if test="supportNumber != null" >
+        supportNumber,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="problemId != null" >
+        #{problemId},
+      </if>
+      <if test="creator != null" >
+        #{creator},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="state != null" >
+        #{state},
+      </if>
+      <if test="parent != null" >
+        #{parent},
+      </if>
+      <if test="content != null" >
+        #{content},
+      </if>
+        <if test="adoptState != null" >
+        #{adoptState},
+      </if>
+      <if test="supportNumber != null" >
+        #{supportNumber},
+      </if>
+    </trim>
+  </insert>
+  
+    <select id="selectSelective" parameterType="gx.common.entity.webproject.Problemreply" resultMap="BaseResultMap">
+  select <include refid="TBase_Column_List"/>,u.username as creatorName  FROM problemreply t inner join user u on  t.creator=u.id
+     where 1=1
+     <if test="id != null" >
+       and t.id = #{id}
+      </if>
+  	 <if test="problemId != null" >
+       and t.problemid = #{problemId}
+      </if>
+      <if test="createTime != null" >
+        and  t.createTime = #{createTime}
+      </if>
+      <if test="creator != null" >
+        and  t.creator = #{creator}
+      </if>
+      <if test="state != null" >
+        and  t.state = #{state}
+      </if>
+      <if test="content != null" >
+        and  t.content = #{content}
+      </if>
+      <if test="parent != null" >
+        and  parent = #{parent}
+      </if>
+       <if test="adoptState != null" >
+       and t.adoptState= #{adoptState}
+      </if>  
+      <if test="supportNumber != null" >
+       and  t.supportNumber = #{supportNumber}
+      </if>
+       ORDER BY supportNumber DESC,createTime DESC
+      
+  </select>
+
+  <update id="updateByPrimaryKeySelective" parameterType="gx.common.entity.webproject.Problem" >
+    update problemreply
+    <set >
+      <if test="problemId != null" >
+       problemid = #{problemId},
+      </if>
+      <if test="createTime != null" >
+          createTime = #{createTime},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator},
+      </if>
+      <if test="state != null" >
+        state = #{state},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="parent != null" >
+        parent = #{parent},
+      </if>
+       <if test="adoptState != null" >
+       adoptState= #{adoptState},
+      </if>  
+       <if test="supportNumber != null" >
+        supportNumber = #{supportNumber},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+</mapper>

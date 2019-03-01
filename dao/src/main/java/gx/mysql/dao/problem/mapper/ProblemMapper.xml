@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="gx.mysql.dao.problem.ProblemMapper" >
+  <resultMap id="BaseResultMap" type="gx.common.entity.webproject.Problem" >
+    <id column="id" property="id"  />
+    <result column="title" property="title" />
+    <result column="createTime" property="createTime"  />
+    <result column="updatetime" property="updatetime"  />
+    <result column="state" property="state" />
+    <result column="creator" property="creator"  />
+    <result column="money" property="money"  />
+    <result column="Viewingtimes" property="viewingtimes"  />
+    <result column="content" property="content" />
+    <result column="problemType" property="problemType" />
+    <result column="problemstate" property="problemstate" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, createTime, updatetime, state, creator, money, viewingtimes,content,problemstate,problemType
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from problem
+    where id = #{id}
+  </delete>
+
+   <select id="selectId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+     select t.id, t.title, t.createTime, t.updatetime, t.state,content,t.viewingtimes
+     from problem t
+    where t.id = #{id}
+   </select>
+
+  <insert id="insertSelective" parameterType="gx.common.entity.webproject.Problem" useGeneratedKeys="true" keyProperty="id">
+    insert into problem
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="viewingtimes != null" >
+        Viewingtimes,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="problemstate != null" >
+        problemstate,
+      </if>
+       <if test="problemType != null" >
+        problemType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime},
+      </if>
+      <if test="state != null" >
+        #{state},
+      </if>
+      <if test="creator != null" >
+        #{creator},
+      </if>
+      <if test="money != null" >
+        #{money},
+      </if>
+      <if test="viewingtimes != null" >
+        #{viewingtimes},
+      </if>
+      <if test="content != null" >
+        #{content},
+      </if>
+      <if test="problemstate != null" >
+         #{problemstate},
+      </if>
+        <if test="problemType != null" >
+        #{problemType},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="gx.common.entity.webproject.Problem" >
+    update problem
+    <set >
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime},
+      </if>
+      <if test="state != null" >
+        state = #{state},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator},
+      </if>
+      <if test="money != null" >
+        money = #{money},
+      </if>
+      <if test="viewingtimes != null" >
+        Viewingtimes = #{viewingtimes},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+       <if test="problemstate != null" >
+        problemstate = #{problemstate},
+      </if>
+       <if test="problemType != null" >
+        problemType = #{problemType},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <select id="selectSelective" parameterType="gx.common.entity.webproject.Problem" resultMap="BaseResultMap">
+  select <include refid="Base_Column_List"/>,(select count(*) from problemreply t1 where t1.problemid = t.id) as numberComments  FROM problem t where 1=1
+     <if test="id != null" >
+       and id = #{id}
+      </if>
+  	 <if test="title != null" >
+       and title = #{title}
+      </if>
+      <if test="createTime != null" >
+        and  createTime = #{createTime}
+      </if>
+      <if test="updatetime != null" >
+        and  updatetime = #{updatetime}
+      </if>
+      <if test="state != null" >
+        and  state = #{state}
+      </if>
+      <if test="creator != null" >
+        and  creator = #{creator}
+      </if>
+      <if test="money != null" >
+        and  money = #{money}
+      </if>
+      <if test="viewingtimes != null" >
+        and  Viewingtimes = #{viewingtimes}
+      </if>
+       <if test="problemstate != null" >
+        and  problemstate = #{problemstate}
+      </if>
+      <if test="problemType != null" >
+        and problemType = #{problemType}
+      </if>
+        ORDER BY t.createTime DESC
+  </select>
+
+  <select id="findMyProblemAndReply" parameterType="gx.common.entity.webproject.Problem" resultMap="BaseResultMap">
+		  SELECT  s1.id, s1.title, s1.creator, s1.createTime,s1.problemstate, s1.content,s1.money
+		FROM (SELECT  t.id, t.title,t.creator,t.createTime, t.problemstate, t.money, t.content
+		  FROM problem t  WHERE t.creator = #{creator}
+		  UNION
+		  SELECT   t1.id, t1.title, t1.creator, t1.createTime, t1.problemstate,t1.money,t1.content
+		  FROM problem t1  LEFT JOIN problemreply p   ON t1.id = p.problemid  WHERE p.creator = #{creator}) s1
+		ORDER BY s1.createTime DESC
+  </select>
+
+
+		<!-- 用户中心，用户查询与我有关的帖子 -->
+	  <select id="findMyProblemAndReplyCount" parameterType="gx.common.entity.webproject.Problem" resultType="Integer">
+	    select count(ss.id)  from (
+	    SELECT t.id,t.title, t.creator,t.createTime, t.problemstate, t.money FROM problem t
+		     WHERE t.creator = #{creator}
+
+		     UNION
+
+		     SELECT  t1.id, t1.title,t1.creator, t1.createTime, t1.problemstate,t1.money FROM problem t1 LEFT JOIN problemreply p
+			        ON t1.id = p.problemid  WHERE p.creator = #{creator}  ) ss
+     </select>
+</mapper>
